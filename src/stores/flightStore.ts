@@ -9,6 +9,7 @@ import { titleCase } from "../utils/stringUtils";
 const AMADEUS_API_URL = "https://test.api.amadeus.com";
 const CLIENT_ID = process.env.REACT_APP_AMADEUS_API_KEY;
 const CLIENT_SECRET = process.env.REACT_APP_AMADEUS_API_SECRET;
+const CACHE_EXPIRY = 10 * 60 * 1000;
 
 class FlightStore {
   flights: TableData[] = [];
@@ -50,6 +51,17 @@ class FlightStore {
     origin: string,
     departureDate: string = ""
   ): Promise<void> {
+    const cacheKey = this.getCacheKey(origin, departureDate);
+
+    if (this.isCacheValid(origin, departureDate)) {
+      const cachedData = JSON.parse(sessionStorage.getItem(cacheKey)!);
+      runInAction(() => {
+        this.flights = cachedData.flights;
+        this.originalFlights = cachedData.flights;
+      });
+      return;
+    }
+
     if (!this.token) await this.fetchToken();
     runInAction(() => {
       this.loading = true;
@@ -91,6 +103,11 @@ class FlightStore {
         this.originalFlights = flightsData;
         this.flights = flightsData;
         this.editedCells = new Set();
+
+        sessionStorage.setItem(
+          cacheKey,
+          JSON.stringify({ flights: flightsData, timestamp: Date.now() })
+        );
       });
     } catch (err: any) {
       runInAction(() => {
@@ -157,6 +174,19 @@ class FlightStore {
       })
     );
   }, 300);
+
+  getCacheKey(origin: string, departureDate: string) {
+    return `flight_cache_${origin}_${departureDate || "any"}`;
+  }
+
+  isCacheValid(origin: string, departureDate: string): boolean {
+    const cacheKey = this.getCacheKey(origin, departureDate);
+    const cachedData = sessionStorage.getItem(cacheKey);
+    if (!cachedData) return false;
+
+    const { timestamp } = JSON.parse(cachedData);
+    return Date.now() - timestamp < CACHE_EXPIRY;
+  }
 }
 
 export const flightStore = new FlightStore();
