@@ -96,9 +96,7 @@ const FlightTable = observer(() => {
 
                             <TextField
                               variant="outlined"
-                              placeholder={`Search ${formatHeaderCase(
-                                column
-                              )}...`}
+                              placeholder={`Search ${formatHeaderCase(column)}...`}
                               size="small"
                               onChange={(e) => {
                                 flightStore.debouncedFilter(
@@ -108,7 +106,10 @@ const FlightTable = observer(() => {
 
                                 if (page) setPage(0);
                               }}
-                              sx={{ width: "100%", mt: 1 }}
+                              sx={{
+                                width: "100%",
+                                mt: 1,
+                              }}
                             />
                           </TableCell>
                         )}
