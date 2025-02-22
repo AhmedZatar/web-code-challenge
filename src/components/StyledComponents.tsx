@@ -1,7 +1,6 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
 
 export const TableContainer = styled.div`
-  padding: 20px;
   max-width: 100%;
   overflow-x: auto;
 `;
@@ -26,7 +25,7 @@ export const TableHeader = styled.th`
 export const TableCell = styled.td<{ isEdited?: boolean }>`
   padding: 12px;
   border-bottom: 1px solid #ddd;
-  background: ${({ isEdited }) => (isEdited ? '#fff9c4' : 'inherit')};
+  background: ${({ isEdited }) => (isEdited ? "#fff9c4" : "inherit")};
 `;
 
 export const SearchInput = styled.input`
@@ -35,17 +34,4 @@ export const SearchInput = styled.input`
   margin: 4px 0;
   border: 1px solid #ddd;
   border-radius: 4px;
-`;
-
-export const SaveButton = styled.button`
-  padding: 10px 20px;
-  background: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 20px;
-  &:hover {
-    background: #1565c0;
-  }
 `;

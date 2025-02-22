@@ -1,76 +1,49 @@
-import { useTableData } from "./hooks/useTableData";
-import {
-  TableContainer,
-  StyledTable,
-  TableHeader,
-  TableCell,
-  SearchInput,
-  SaveButton,
-} from "./components/StyledComponents";
-import { TableData } from "./types/tableTypes";
+import { observer } from "mobx-react-lite";
+
+import { flightStore } from "./stores/flightStore";
+
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCell } from "./components/DateCell";
 
-export default function App() {
-  const { data, editedCells, updateCell, saveChanges, debouncedFilter } =
-    useTableData();
-  const columns = Object.keys(data[0] || {});
-  const dateCells = ["active_from", "active_to", "booking_from", "booking_to"];
+import { Grid2 as Grid, Container, Paper } from "@mui/material";
+import Spinner from "./components/Spinner";
+import ErrorMessage from "./components/ErrorMessage";
+import FlightSearchForm from "./components/FlightSearchForm";
+import FlightTable from "./components/FlightTable";
+import SaveButton from "./components/SaveButton";
 
+const App = observer(() => {
   return (
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <TableContainer>
-          <SaveButton onClick={saveChanges}>Save Changes</SaveButton>
-          <StyledTable>
-            <thead>
-              <tr>
-                {columns.map((column) => (
-                  <TableHeader key={column}>
-                    {column}
-                    <SearchInput
-                      placeholder={`Search ${column}...`}
-                      onChange={(e) => debouncedFilter(column, e.target.value)}
-                    />
-                  </TableHeader>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((row, rowIndex) => (
-                <tr key={rowIndex}>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={`${rowIndex}-${column}`}
-                      isEdited={editedCells.has(`${rowIndex}-${column}`)}
-                    >
-                      {dateCells.includes(column) ? (
-                        <DateCell
-                          value={row[column as keyof TableData]}
-                          onChange={(value) =>
-                            updateCell(rowIndex, column, value)
-                          }
-                        />
-                      ) : (
-                        <input
-                          value={row[column as keyof TableData]}
-                          onChange={(e) =>
-                            updateCell(rowIndex, column, e.target.value)
-                          }
-                          style={{
-                            border: "none",
-                            background: "transparent",
-                            width: "100%",
-                          }}
-                        />
-                      )}
-                    </TableCell>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </StyledTable>
-        </TableContainer>
-      </LocalizationProvider>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Container sx={{ py: 4 }}>
+        <Grid container spacing={6}>
+          <Grid size={12}>
+            <Paper sx={{ p: 2 }} elevation={1}>
+              <Grid container size={12} spacing={2}>
+                <Grid size={10}>
+                  <FlightSearchForm />
+                </Grid>
+                <Grid size={2}>
+                  <SaveButton onClick={() => flightStore.saveChanges()} />
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+          <Grid size={12}>
+            <Paper sx={{ p: 2 }} elevation={6}>
+              {flightStore.loading ? (
+                <Spinner />
+              ) : flightStore.error ? (
+                <ErrorMessage message={flightStore.error} />
+              ) : (
+                <FlightTable />
+              )}
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
+    </LocalizationProvider>
   );
-}
+});
+
+export default App;
