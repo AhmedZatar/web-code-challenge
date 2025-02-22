@@ -15,12 +15,17 @@
     "@mui/material": "^6.4.4",
     "@mui/x-date-pickers": "^7.26.0",
     "@tanstack/react-table": "^8.21.2",
+    "axios": "^1.7.9",
     "dayjs": "^1.11.13",
+    "formik": "^2.4.6",
     "loader-utils": "3.2.1",
     "lodash": "^4.17.21",
+    "mobx": "^6.13.6",
+    "mobx-react-lite": "^4.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.15",
