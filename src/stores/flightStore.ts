@@ -21,6 +21,11 @@ class FlightStore {
 
   constructor() {
     makeAutoObservable(this);
+    this.init();
+  }
+
+  async init() {
+    await this.fetchFlights("MAD");
   }
 
   async fetchToken() {
@@ -41,7 +46,10 @@ class FlightStore {
     }
   }
 
-  async fetchFlights(origin: string, departureDate: string): Promise<void> {
+  async fetchFlights(
+    origin: string,
+    departureDate: string = ""
+  ): Promise<void> {
     if (!this.token) await this.fetchToken();
     runInAction(() => {
       this.loading = true;
@@ -53,7 +61,7 @@ class FlightStore {
         `${AMADEUS_API_URL}/v1/shopping/flight-destinations`,
         {
           headers: { Authorization: `Bearer ${this.token}` },
-          params: { origin, departureDate },
+          params: { origin, departureDate: departureDate || undefined },
         }
       );
 

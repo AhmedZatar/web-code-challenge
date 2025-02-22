@@ -33,7 +33,7 @@ const FlightSearchForm = observer(() => {
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
   const formik = useFormik({
-    initialValues: { origin: "", departureDate: "" },
+    initialValues: { origin: "MAD", departureDate: "" },
     validationSchema,
     onSubmit: (values) => {
       flightStore.fetchFlights(
