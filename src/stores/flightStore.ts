@@ -4,6 +4,7 @@ import debounce from "lodash/debounce";
 import flightService from "../services/flightService";
 
 import { TableData } from "../types/tableTypes";
+import { Flight } from "../types/apiTypes";
 
 import { titleCase } from "../utils/stringUtils";
 
@@ -66,25 +67,27 @@ class FlightStore {
     if (!this.token) await this.fetchToken();
 
     try {
-      const data = await flightService.fetchFlights(
+      const response = await flightService.fetchFlights(
         this.token!,
         origin,
         departureDate
       );
 
       runInAction(() => {
-        const locations = data.dictionaries?.locations;
+        const locations = response.dictionaries?.locations;
 
-        const flightsData = data.data.map((flight: any, index: number) => ({
-          id: String(index + 1),
-          origin: `${flight.origin} (${titleCase(locations?.[flight.origin]?.detailedName)})`,
-          destination: `${flight.destination} (${titleCase(
-            locations?.[flight.destination]?.detailedName
-          )})`,
-          departureDate: flight.departureDate,
-          returnDate: flight.returnDate,
-          price: `${flight.price?.total} \u20AC`,
-        }));
+        const flightsData = response.data.map(
+          (flight: Flight, index: number) => ({
+            id: String(index + 1),
+            origin: `${flight.origin} (${titleCase(locations?.[flight.origin]?.detailedName)})`,
+            destination: `${flight.destination} (${titleCase(
+              locations?.[flight.destination]?.detailedName
+            )})`,
+            departureDate: flight.departureDate,
+            returnDate: flight.returnDate,
+            price: `${flight.price?.total} \u20AC`,
+          })
+        );
 
         this.originalFlights = flightsData;
         this.flights = flightsData;

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import config from "../config";
+import { FlightResponse } from "../types/apiTypes";
 
 export const fetchToken = async (): Promise<string> => {
   const response = await axios.post(
@@ -20,7 +21,7 @@ export const fetchFlights = async (
   token: string,
   origin: string,
   departureDate?: string
-) => {
+): Promise<FlightResponse> => {
   const response = await axios.get(
     `${config.AMADEUS_URL}/v1/shopping/flight-destinations`,
     {

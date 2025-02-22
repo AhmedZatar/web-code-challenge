@@ -36,7 +36,10 @@ const FlightTable = observer(() => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: {
+    destination: { index: number } | null;
+    source: { index: number };
+  }) => {
     if (!result.destination) return;
     const newColumns = [...columns];
     const [movedColumn] = newColumns.splice(result.source.index, 1);
