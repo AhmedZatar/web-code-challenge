@@ -11,13 +11,10 @@ import { TextField, Button, Box } from "@mui/material";
 
 const validationSchema = Yup.object({
   origin: Yup.string()
-    .length(3, "IATA code must be 3 characters (e.g., MAD)")
+    .length(3, "origin must be IATA code")
     .required("Origin is required"),
   departureDate: Yup.string()
-    .matches(
-      /^\d{4}-\d{2}-\d{2}$/,
-      "Enter a valid date in YYYY-MM-DD format (e.g., 2025-03-10)"
-    )
+    .matches(/^\d{4}-\d{2}-\d{2}$/, "Enter a valid date")
     .test("max180days", "Date must be within 180 days from today", (value) => {
       if (!value) return false;
       const today = dayjs();
@@ -57,7 +54,7 @@ const FlightSearchForm = observer(() => {
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         error={formik.touched.origin && Boolean(formik.errors.origin)}
-        helperText={formik.touched.origin && formik.errors.origin}
+        helperText={formik.touched.origin ? formik.errors.origin || " " : " "}
         size="small"
       />
 
@@ -78,14 +75,27 @@ const FlightSearchForm = observer(() => {
             error:
               formik.touched.departureDate &&
               Boolean(formik.errors.departureDate),
-            helperText:
-              formik.touched.departureDate && formik.errors.departureDate,
+            helperText: formik.touched.departureDate
+              ? formik.errors.departureDate || " "
+              : " ",
             size: "small",
+          },
+          openPickerIcon: {
+            sx: {
+              color: "primary.main",
+            },
           },
         }}
       />
 
-      <Button type="submit" variant="contained" color="primary" size="small">
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        size="small"
+        sx={{ height: 40 }}
+        disabled={flightStore.loading}
+      >
         Search
       </Button>
     </Box>

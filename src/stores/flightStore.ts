@@ -51,6 +51,11 @@ class FlightStore {
     origin: string,
     departureDate: string = ""
   ): Promise<void> {
+    runInAction(() => {
+      this.loading = true;
+      this.error = null;
+    });
+
     const cacheKey = this.getCacheKey(origin, departureDate);
 
     if (this.isCacheValid(origin, departureDate)) {
@@ -58,15 +63,13 @@ class FlightStore {
       runInAction(() => {
         this.flights = cachedData.flights;
         this.originalFlights = cachedData.flights;
+        this.editedCells = new Set();
+        this.loading = false;
       });
       return;
     }
 
     if (!this.token) await this.fetchToken();
-    runInAction(() => {
-      this.loading = true;
-      this.error = null;
-    });
 
     try {
       const response = await axios.get(
@@ -76,11 +79,6 @@ class FlightStore {
           params: { origin, departureDate: departureDate || undefined },
         }
       );
-
-      if (response.status === 401) {
-        await this.fetchToken();
-        return this.fetchFlights(origin, departureDate);
-      }
 
       runInAction(() => {
         const locations = response.data.dictionaries?.locations;
@@ -110,6 +108,11 @@ class FlightStore {
         );
       });
     } catch (err: any) {
+      if (err.response?.status === 401) {
+        console.warn("Token expired. Refreshing...");
+        await this.fetchToken();
+        return this.fetchFlights(origin, departureDate);
+      }
       runInAction(() => {
         this.error = err.response?.data?.message || "Failed to fetch flights.";
       });
