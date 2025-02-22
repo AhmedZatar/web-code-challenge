@@ -109,7 +109,6 @@ class FlightStore {
       });
     } catch (err: any) {
       if (err.response?.status === 401) {
-        console.warn("Token expired. Refreshing...");
         await this.fetchToken();
         return this.fetchFlights(origin, departureDate);
       }
