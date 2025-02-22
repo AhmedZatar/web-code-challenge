@@ -84,7 +84,7 @@ const FlightTable = observer(() => {
                             {...provided.dragHandleProps}
                             sx={{
                               fontWeight: "bold",
-                              backgroundColor: "#f5f5f5",
+                              backgroundColor: "background.default",
                               cursor: "grab",
                               userSelect: "none",
                               minWidth: 150,
@@ -132,7 +132,7 @@ const FlightTable = observer(() => {
                           backgroundColor: flightStore.editedCells.has(
                             `${row.id}-${column}`
                           )
-                            ? "#fff9c4"
+                            ? "edited.light"
                             : "inherit",
                         }}
                       >
