@@ -36,7 +36,10 @@ const FlightTable = observer(() => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: {
+    destination: { index: number } | null;
+    source: { index: number };
+  }) => {
     if (!result.destination) return;
     const newColumns = [...columns];
     const [movedColumn] = newColumns.splice(result.source.index, 1);
@@ -96,9 +99,7 @@ const FlightTable = observer(() => {
 
                             <TextField
                               variant="outlined"
-                              placeholder={`Search ${formatHeaderCase(
-                                column
-                              )}...`}
+                              placeholder={`Search ${formatHeaderCase(column)}...`}
                               size="small"
                               onChange={(e) => {
                                 flightStore.debouncedFilter(
@@ -108,7 +109,10 @@ const FlightTable = observer(() => {
 
                                 if (page) setPage(0);
                               }}
-                              sx={{ width: "100%", mt: 1 }}
+                              sx={{
+                                width: "100%",
+                                mt: 1,
+                              }}
                             />
                           </TableCell>
                         )}

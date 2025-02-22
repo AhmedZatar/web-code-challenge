@@ -11,7 +11,7 @@ import SaveButton from "../components/SaveButton";
 
 const HomePage = observer(() => {
   return (
-    <Grid container spacing={6}>
+    <Grid container spacing={4}>
       <Grid size={12}>
         <Paper sx={{ px: 2, pt: 4, pb: 1 }} elevation={4}>
           <Grid container size={12} spacing={2}>
