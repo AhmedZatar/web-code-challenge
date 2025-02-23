@@ -52,7 +52,7 @@ The app will be available at `http://localhost:3000`.
 - **MobX** for state management
 - **MUI** (Material UI) for styling
 - **Axios** for API requests
-- **React Beautiful DnD** for drag & drop
+- **Hello Pangea DnD** for drag & drop
 - **Day.js** for date handling
 
 ---
