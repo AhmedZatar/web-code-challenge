@@ -1,7 +1,7 @@
 {
-  "name": "react-typescript",
+  "name": "flight-inspirations",
   "version": "1.0.0",
-  "description": "React and TypeScript example starter project",
+  "description": "Flight Inspirations App",
   "keywords": [
     "typescript",
     "react",

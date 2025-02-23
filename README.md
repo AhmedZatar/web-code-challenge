@@ -1,51 +1,68 @@
-## Scenario
+# ✈️ Flight Inspirations App
 
-We have a page in our system called *'Flight Inspirations'* where user can see suggestion for his upcoming travel.
-You need to ceate an admin dashboard to view and edit the 'Flight Inspirations'.
+A modern and interactive web application for exploring flight destinations, built with **React, MobX, and MUI**. The app allows users to search for flights, edit flight details, and manage data efficiently with caching and pagination.
 
-## What is already in the codebase:
-You have Tanstack table. Each table cell is editable and after updating any cell (or multiple cells) you will see the editted cells in highlighted color. 
-You are able to save the cells and the data in the table is persisted. This functionality should remain working.
-<img width="1576" alt="Screenshot 2025-02-13 at 2 57 33 PM" src="https://github.com/user-attachments/assets/e83cf53d-65e2-443b-a8af-1102c82bc720" />
+## ✨ Features
 
-## Assignment:
-I. Register on Amadeus Developer and get access to their free open-source APIs we will use in this challenge:
-Step-by-step guide to get the keys https://developers.amadeus.com/register
+- 🔍 **Search Flights** using IATA codes & departure dates.
+- 🖱️ **Editable Table** with real-time updates.
+- 📅 **Date Picker Integration** with MUI X.
+- 🏗️ **Drag & Drop Columns** to rearrange the table.
+- 📄 **Client-Side Pagination** for performance optimization.
+- 📦 **Caching (10 min)** to reduce API calls.
+- 🎨 **Fully Responsive UI** built with Material UI.
 
-II. Create a form with two inputs: one for the city code and another one for the date. Add a submit button or icon.
+---
 
-III. Using the values from the form do the API call to fetch Flight Inspirations 
-http://developers.amadeus.com/self-service/category/flights/api-doc/flight-inspiration-search/api-reference
+## 🚀 Getting Started
 
+### 1️⃣ **Clone the Repository**
+```sh
+git clone git@github.com:AhmedZatar/web-code-challenge.git
+cd web-code-challenge
+```
 
-IV. Display the results of the call in the table you have in this codebase. Feel free to edit any code necessary, its just a blueprint. The only thing that you should pay attention is that cell edit/hightlight/save functionality is working.
+### 2️⃣ **Install Dependencies**
+```sh
+npm install
+```
 
-V. After data is displayed make sure its styled nicely. 
+### 3️⃣ **Set Up Environment Variables**
+Create a `.env.local` file in the root directory and add:
+```
+REACT_APP_AMADEUS_API_KEY=your_api_key
+REACT_APP_AMADEUS_API_SECRET=your_api_secret
+```
 
-VI. Add drag and drop functionality to the columns of the table. (You should be able to switch position of the columns: eg. 5 -> 1, 1 -> 2, etc).
+### 4️⃣ **Run the App**
+```sh
+npm start
+```
+The app will be available at `http://localhost:3000`.
 
-VII. Add client side pagination.
+---
 
-VII. Optimize the state management of the app.
+## 📹 Demo Video
+📌 [Link to Demo Video](https://youtu.be/i3kfvI626gg)
 
+---
 
-## Conditions
-- You should think about the UI and UX of your app.
-- You should think about the state management of your app.
-- You should consume the api endpoint mentioned and not use it as internal json file.
-- You should build this application using Reactjs and Typescript.
+## 🛠️ Technologies Used
+- **React 18** with TypeScript
+- **MobX** for state management
+- **MUI** (Material UI) for styling
+- **Axios** for API requests
+- **React Beautiful DnD** for drag & drop
+- **Day.js** for date handling
 
-## What we are looking for
+---
 
-- **Simple, clear, readable code** How well structured it is? Clear separation of concerns? Can anyone just look at it and get the idea to
-what is being done? Does it follow any standards?
-- **Correctness** Does the application do what it promises? Can we find bugs or trivial flaws?
-- **Memory efficiency** How will it behave in case of large datasets? Are results cached? Do you have debounce on your search?
-- **Testing** How well tested your application is? Can you give some metrics?
+## 📜 License
+This project is licensed under the **MIT License**.
 
+---
 
-## Questions & Delivery
-
-If you have any questions to this challenge, please do reach out to us.
-
-The challenge should be delivered as a link to a public git repository (github.com or bitbucket.com are preferred).
+## ⚠️ Security Notice 
+**This application is NOT safe to be deployed in its current state.**
+- API secrets are stored in the frontend `.env` file, making them vulnerable.
+- Consider using a backend server to securely handle API requests.
