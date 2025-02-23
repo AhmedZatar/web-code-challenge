@@ -8,17 +8,21 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import App from "./App";
 import theme from "./theme";
 
+import ErrorBoundary from "./components/ErrorBoundary";
+
 const rootElement = document.getElementById("root")!;
 const root = ReactDOM.createRoot(rootElement);
 
 root.render(
   <React.StrictMode>
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+    <ErrorBoundary>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
 
-        <App />
-      </ThemeProvider>
-    </LocalizationProvider>
+          <App />
+        </ThemeProvider>
+      </LocalizationProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
