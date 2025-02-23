@@ -14,6 +14,11 @@ A modern and interactive web application for exploring flight destinations, buil
 
 ---
 
+## 📹 Demo Video
+📌 [Link to Demo Video](https://youtu.be/i3kfvI626gg)
+
+---
+
 ## 🚀 Getting Started
 
 ### 1️⃣ **Clone the Repository**
@@ -42,11 +47,6 @@ The app will be available at `http://localhost:3000`.
 
 ---
 
-## 📹 Demo Video
-📌 [Link to Demo Video](https://youtu.be/i3kfvI626gg)
-
----
-
 ## 🛠️ Technologies Used
 - **React 18** with TypeScript
 - **MobX** for state management
@@ -57,12 +57,12 @@ The app will be available at `http://localhost:3000`.
 
 ---
 
-## 📜 License
-This project is licensed under the **MIT License**.
-
----
-
 ## ⚠️ Security Notice 
 **This application is NOT safe to be deployed in its current state.**
 - API secrets are stored in the frontend `.env` file, making them vulnerable.
 - Consider using a backend server to securely handle API requests.
+
+---
+
+## 📜 License
+This project is licensed under the **MIT License**.
