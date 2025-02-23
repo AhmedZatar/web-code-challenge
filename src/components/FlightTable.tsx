@@ -16,6 +16,7 @@ import {
   TablePagination,
   TextField,
   Box,
+  Typography,
 } from "@mui/material";
 import { DateCell } from "./DateCell";
 
@@ -125,46 +126,59 @@ const FlightTable = observer(() => {
             </Droppable>
 
             <TableBody>
-              {flightStore.flights
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => (
-                  <TableRow key={row.id}>
-                    {columns.map((column) => (
-                      <TableCell
-                        key={`${row.id}-${column}`}
-                        sx={{
-                          backgroundColor: flightStore.editedCells.has(
-                            `${row.id}-${column}`
-                          )
-                            ? "edited.light"
-                            : "inherit",
-                        }}
-                      >
-                        {dateCells.includes(column) ? (
-                          <DateCell
-                            value={row[column]}
-                            onChange={(value) =>
-                              flightStore.updateFlight(row.id, column, value)
-                            }
-                          />
-                        ) : (
-                          <TextField
-                            value={row[column] || ""}
-                            onChange={(e) =>
-                              flightStore.updateFlight(
-                                row.id,
-                                column,
-                                e.target.value
-                              )
-                            }
-                            variant="standard"
-                            fullWidth
-                          />
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
+              {flightStore.flights.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    sx={{ textAlign: "center", py: 10 }}
+                  >
+                    <Typography variant="h6" color="textSecondary">
+                      No data found
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ) : (
+                flightStore.flights
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => (
+                    <TableRow key={row.id}>
+                      {columns.map((column) => (
+                        <TableCell
+                          key={`${row.id}-${column}`}
+                          sx={{
+                            backgroundColor: flightStore.editedCells.has(
+                              `${row.id}-${column}`
+                            )
+                              ? "edited.light"
+                              : "inherit",
+                          }}
+                        >
+                          {dateCells.includes(column) ? (
+                            <DateCell
+                              value={row[column]}
+                              onChange={(value) =>
+                                flightStore.updateFlight(row.id, column, value)
+                              }
+                            />
+                          ) : (
+                            <TextField
+                              value={row[column] || ""}
+                              onChange={(e) =>
+                                flightStore.updateFlight(
+                                  row.id,
+                                  column,
+                                  e.target.value
+                                )
+                              }
+                              variant="standard"
+                              fullWidth
+                            />
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+              )}
             </TableBody>
           </Table>
         </DragDropContext>
