@@ -7,28 +7,33 @@ import { TableData } from "../types/tableTypes";
 import { Flight } from "../types/apiTypes";
 
 import { titleCase } from "../utils/stringUtils";
-
-const CACHE_EXPIRY = 10 * 60 * 1000;
+import {
+  getFlightCacheKey,
+  isFlightCacheValid,
+  setInCache,
+  getFromCache,
+} from "../utils/cacheUtils";
 
 class FlightStore {
-  flights: TableData[] = [];
-  originalFlights: TableData[] = [];
-  token: string | null = null;
-  loading: boolean = false;
-  error: string | null = null;
-  editedCells: Set<string> = new Set();
-  columnFilters: Record<string, string> = {};
+  public flights: TableData[] = [];
+  public loading: boolean = false;
+  public error: string | null = null;
+  public editedCells: Set<string> = new Set();
+
+  private originalFlights: TableData[] = [];
+  private token: string | null = null;
+  private columnFilters: Record<string, string> = {};
 
   constructor() {
     makeAutoObservable(this);
     this.init();
   }
 
-  async init() {
+  private async init() {
     await this.fetchFlights("MAD");
   }
 
-  async fetchToken() {
+  private async fetchToken() {
     try {
       const token = await flightService.fetchToken();
 
@@ -42,7 +47,7 @@ class FlightStore {
     }
   }
 
-  async fetchFlights(
+  public async fetchFlights(
     origin: string,
     departureDate: string = ""
   ): Promise<void> {
@@ -51,10 +56,10 @@ class FlightStore {
       this.error = null;
     });
 
-    const cacheKey = this.getCacheKey(origin, departureDate);
+    const cacheKey = getFlightCacheKey(origin, departureDate);
 
-    if (this.isCacheValid(origin, departureDate)) {
-      const cachedData = JSON.parse(sessionStorage.getItem(cacheKey)!);
+    if (isFlightCacheValid(origin, departureDate)) {
+      const cachedData = getFromCache(cacheKey);
       runInAction(() => {
         this.flights = cachedData.flights;
         this.originalFlights = cachedData.flights;
@@ -93,13 +98,7 @@ class FlightStore {
         this.flights = flightsData;
         this.editedCells = new Set();
 
-        sessionStorage.setItem(
-          cacheKey,
-          JSON.stringify({
-            flights: flightsData,
-            timestamp: Date.now(),
-          })
-        );
+        setInCache(cacheKey, flightsData);
       });
     } catch (err: any) {
       if (err.response?.status === 401) {
@@ -116,7 +115,7 @@ class FlightStore {
     }
   }
 
-  updateFlight(flightId: String, columnId: string, value: string) {
+  public updateFlight(flightId: String, columnId: string, value: string) {
     const flightIndex = this.flights.findIndex((f) => f.id === flightId);
     const originalIndex = this.originalFlights.findIndex(
       (f) => f.id === flightId
@@ -139,11 +138,11 @@ class FlightStore {
     this.editedCells.add(`${flightId}-${columnId}`);
   }
 
-  saveChanges() {
+  public saveChanges() {
     this.editedCells.clear();
   }
 
-  debouncedFilter = debounce((column: string, value: string) => {
+  public debouncedFilter = debounce((column: string, value: string) => {
     this.columnFilters = {
       ...this.columnFilters,
       [column]: value,
@@ -169,19 +168,6 @@ class FlightStore {
       })
     );
   }, 300);
-
-  getCacheKey(origin: string, departureDate: string) {
-    return `flight_cache_${origin}_${departureDate || "any"}`;
-  }
-
-  isCacheValid(origin: string, departureDate: string): boolean {
-    const cacheKey = this.getCacheKey(origin, departureDate);
-    const cachedData = sessionStorage.getItem(cacheKey);
-    if (!cachedData) return false;
-
-    const { timestamp } = JSON.parse(cachedData);
-    return Date.now() - timestamp < CACHE_EXPIRY;
-  }
 }
 
 export const flightStore = new FlightStore();
